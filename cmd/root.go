@@ -12,7 +12,8 @@ import (
 )
 
 var (
-	limit int
+	repolimit    int
+	commentlimit int
 	// デフォルトは本番用のRealGitHubClientを使う
 	gitHubClient githubapi.GitHubAPI = githubapi.NewRealGitHubClient()
 )
@@ -24,10 +25,10 @@ var rootCmd = &cobra.Command{
 in a user-friendly format. It fetches PR information and displays the latest comments
 from non-bot users.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Fetching %d PRs...\n", limit)
+		fmt.Printf("Fetching %d PRs and %d comments...\n", repolimit, commentlimit)
 
 		// 1. PR一覧を取得
-		prs, err := gitHubClient.FetchPullRequests(limit, "@me")
+		prs, err := gitHubClient.FetchPullRequests(repolimit, "@me")
 		if err != nil {
 			log.Printf("Error fetching PRs: %v\n", err)
 			return
@@ -90,7 +91,7 @@ from non-bot users.`,
 			// 3.6 Bot除外 → 時系列ソート(最新→古い順) → 上位5件
 			allComments = aggregator.FilterOutBots(allComments)
 			aggregator.SortByCreatedAtDesc(allComments)
-			top5 := aggregator.TopN(allComments, 5) // TODO ここもオプションで変えられるようにしたい。
+			top5 := aggregator.TopN(allComments, commentlimit) // TODO ここもオプションで変えられるようにしたい。
 
 			// 3.7 コメントを表示
 			//   (コメントも色を付ける場合は適宜 SprintFunc を用意)
@@ -112,7 +113,8 @@ from non-bot users.`,
 }
 
 func init() {
-	rootCmd.PersistentFlags().IntVarP(&limit, "limit", "l", 5, "Number of PRs to fetch (default: 5)")
+	rootCmd.PersistentFlags().IntVarP(&repolimit, "repolimit", "r", 5, "Number of PRs to fetch (default: 5)")
+	rootCmd.PersistentFlags().IntVarP(&commentlimit, "commentlimit", "c", 5, "Number of comments to fetch (default: 5)")
 }
 
 func Execute() error {
