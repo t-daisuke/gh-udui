@@ -5,15 +5,13 @@ import (
 	"fmt"
 	"os/exec"
 
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
 // Repository は repository フィールドの情報を格納
 type Repository struct {
-	Name  string `json:"name"`
-	Owner struct {
-		Login string `json:"login"`
-	} `json:"owner"`
+	Name string `json:"nameWithOwner"` // orgname/reponame の形式
 }
 
 // PullRequest は gh search で返却される JSON に対応
@@ -64,9 +62,17 @@ from non-bot users.`,
 		}
 
 		// 4. 取得した PR を表示
-		for i, pr := range prs {
-			fmt.Printf("%d: [%d] %s (repo: %s/%s, updated: %s)\n",
-				i+1, pr.Number, pr.Title, pr.Repository.Owner.Login, pr.Repository.Name, pr.UpdatedAt)
+		repoColor := color.New(color.FgHiBlue).SprintFunc()
+		prNumColor := color.New(color.FgHiGreen).SprintFunc()
+		titleColor := color.New(color.FgHiWhite).SprintFunc()
+		updatedColor := color.New(color.FgHiYellow).SprintFunc()
+
+		for _, pr := range prs {
+			fmt.Printf("%s#%s %s (updated: %s)\n",
+				repoColor(pr.Repository.Name),
+				prNumColor(pr.Number),
+				titleColor(pr.Title),
+				updatedColor(pr.UpdatedAt))
 		}
 	},
 }
