@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	// "github.com/fatih/color"
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 
 	"github.com/t-daisuke/gh-udui/internal/aggregator"
@@ -32,12 +32,12 @@ var rootCmd = &cobra.Command{
 		}
 
 		// 2. PR一覧を表示
-		// repoColor := color.New(color.FgHiBlue).SprintFunc()
-		// prNumColor := color.New(color.FgHiGreen).SprintFunc()
-		// titleColor := color.New(color.FgHiWhite).SprintFunc()
-		// updatedColor := color.New(color.FgHiYellow).SprintFunc()
+		repoColor := color.New(color.FgHiBlue).SprintFunc()
+		prNumColor := color.New(color.FgHiGreen).SprintFunc()
+		titleColor := color.New(color.FgHiWhite).SprintFunc()
+		updatedColor := color.New(color.FgHiYellow).SprintFunc()
 
-		/* for _, pr := range prs {
+		for _, pr := range prs {
 			// PRの基本情報を表示
 			fmt.Printf("%s#%s %s (updated: %s)\n",
 				repoColor(pr.Repository.Name),
@@ -45,32 +45,9 @@ var rootCmd = &cobra.Command{
 				titleColor(pr.Title),
 				updatedColor(pr.UpdatedAt))
 
-			// 2-1. owner/repo を分割
-			owner, repo, err := githubapi.SplitOwnerRepo(pr.Repository.Name)
-			if err != nil {
-				// リポジトリ名が想定外の形式だった場合
-				log.Printf("Skipping invalid repo name: %s\n", pr.Repository.Name)
-				continue
-			}
-
-			// 2-2. コメントを取得
-			comments, err := githubapi.NewRealGitHubClient().FetchIssueComments(owner, repo, pr.Number)
-			if err != nil {
-				log.Printf("Error fetching comments for %s: %v\n", pr.Repository.Name, err)
-				continue
-			}
-
-			// 2-3. コメント表示 (後でBot除外や時系列ソートを入れられる)
-			for _, c := range comments {
-				// ここでシンプルにBodyだけ出す
-				// Bot判定: c.User.Login に "bot" が含まれてたらスキップするなどは後で実装
-				fmt.Printf("  - %s (#%d) created at: %s by %s\n",
-					c.Body, c.ID, c.CreatedAt, c.User.Login)
-			}
-
 			// PRの区切り
 			fmt.Println("---")
-		} */
+		}
 		for _, pr := range prs {
 			fmt.Printf("\n%s#%d %s\n", pr.Repository.Name, pr.Number, pr.Title)
 
