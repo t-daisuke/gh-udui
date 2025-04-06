@@ -14,6 +14,7 @@ import (
 var (
 	repolimit    int
 	commentlimit int
+	repoState    string
 	// デフォルトは本番用のRealGitHubClientを使う
 	gitHubClient githubapi.GitHubAPI = githubapi.NewRealGitHubClient()
 )
@@ -25,10 +26,19 @@ var rootCmd = &cobra.Command{
 in a user-friendly format. It fetches PR information and displays the latest comments
 from non-bot users.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Fetching %d PRs and %d comments...\n", repolimit, commentlimit)
+		if repoState != "" && repoState != "open" && repoState != "closed" {
+			log.Printf("Invalid repository state: %s\n", repoState)
+			return
+		}
+
+		im := "Fetching %d PRs and %d comments...\n"
+		if repoState != "" {
+			im = "Fetching %d PRs and %d comments (state: %s)...\n"
+		}
+		fmt.Printf(im, repolimit, commentlimit, repoState)
 
 		// 1. PR一覧を取得
-		prs, err := gitHubClient.FetchPullRequests(repolimit, "@me")
+		prs, err := gitHubClient.FetchPullRequests(repolimit, "@me", repoState)
 		if err != nil {
 			log.Printf("Error fetching PRs: %v\n", err)
 			return
@@ -115,6 +125,7 @@ from non-bot users.`,
 func init() {
 	rootCmd.PersistentFlags().IntVarP(&repolimit, "repolimit", "r", 5, "Number of PRs to fetch (default: 5)")
 	rootCmd.PersistentFlags().IntVarP(&commentlimit, "commentlimit", "c", 5, "Number of comments to fetch (default: 5)")
+	rootCmd.PersistentFlags().StringVarP(&repoState, "state", "s", "", "State of repository to fetch (default: open)")
 }
 
 func Execute() error {

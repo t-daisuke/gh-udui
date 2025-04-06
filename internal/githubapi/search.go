@@ -14,13 +14,17 @@ func NewRealGitHubClient() *RealGitHubClient {
 	return &RealGitHubClient{}
 }
 
-func (c *RealGitHubClient) FetchPullRequests(limit int, author string) ([]internal.PullRequest, error) {
+func (c *RealGitHubClient) FetchPullRequests(limit int, author string, state string) ([]internal.PullRequest, error) {
 	ghCmd := exec.Command("gh",
 		"search", "prs",
 		"--author", author,
 		"--limit", fmt.Sprintf("%d", limit),
 		"--json", "number,title,updatedAt,repository",
 	)
+
+	if state != "" {
+		ghCmd.Args = append(ghCmd.Args, "--state", state)
+	}
 
 	output, err := ghCmd.Output()
 	if err != nil {
