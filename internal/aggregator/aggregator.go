@@ -1,6 +1,7 @@
 package aggregator
 
 import (
+	"fmt"
 	"sort"
 	"strings"
 	"time"
@@ -28,8 +29,9 @@ func ConvertPullRequestReviews(reviews []internal.Review) []internal.UnifiedComm
 	for _, r := range reviews {
 		t, _ := time.Parse(time.RFC3339, r.SubmittedAt)
 		body := r.Body
-		// state 入れたければ bodyに追記するとか
-		// e.g. body = fmt.Sprintf("[State: %s]\n%s", r.State, r.Body)
+		if r.State != "" {
+			body = fmt.Sprintf("[State: %s]\n%s", r.State, r.Body)
+		}
 
 		result = append(result, internal.UnifiedComment{
 			User:      r.User.Login,

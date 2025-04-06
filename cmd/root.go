@@ -99,7 +99,7 @@ from non-bot users.`,
 
 			for _, c := range top5 {
 				// CreatedAt をフォーマットして一行にまとめる例
-				fmt.Printf("  - %s (%s):\n    %s\n",
+				fmt.Printf("%s (%s):\n%s\n",
 					userColor(c.User),
 					dateColor(c.CreatedAt.Format("2006-01-02 15:04:05")),
 					c.Body)
