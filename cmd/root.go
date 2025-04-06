@@ -23,7 +23,7 @@ from non-bot users.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("Fetching %d PRs...\n", limit)
 
-		prs, err := githubapi.FetchPullRequests(limit, "@me")
+		prs, err := githubapi.NewRealGitHubClient().FetchPullRequests(limit, "@me")
 		if err != nil {
 			log.Printf("Error fetching PRs: %v\n", err)
 			return
