@@ -15,6 +15,8 @@ var (
 	repolimit    int
 	commentlimit int
 	repoState    string
+	reviewer     string
+	author       string
 	// デフォルトは本番用のRealGitHubClientを使う
 	gitHubClient githubapi.GitHubAPI = githubapi.NewRealGitHubClient()
 )
@@ -31,14 +33,27 @@ from non-bot users.`,
 			return
 		}
 
-		im := "Fetching %d PRs and %d comments...\n"
-		if repoState != "" {
-			im = "Fetching %d PRs and %d comments (state: %s)...\n"
+		if author == "" && reviewer == "" {
+			author = "@me"
 		}
-		fmt.Printf(im, repolimit, commentlimit, repoState)
+
+		im := "Fetching %d PRs and %d comments, repoState: %s, reviewer: %s, author: %s \n"
+		imRepoState := "all"
+		if repoState != "" {
+			imRepoState = repoState
+		}
+		imReviewer := "any"
+		if reviewer != "" {
+			imReviewer = reviewer
+		}
+		imAuthor := "any"
+		if author != "" {
+			imAuthor = author
+		}
+		fmt.Printf(im, repolimit, commentlimit, imRepoState, imReviewer, imAuthor)
 
 		// 1. PR一覧を取得
-		prs, err := gitHubClient.FetchPullRequests(repolimit, "@me", repoState)
+		prs, err := gitHubClient.FetchPullRequests(repolimit, author, repoState, reviewer)
 		if err != nil {
 			log.Printf("Error fetching PRs: %v\n", err)
 			return
@@ -126,6 +141,8 @@ func init() {
 	rootCmd.PersistentFlags().IntVarP(&repolimit, "repolimit", "r", 5, "Number of PRs to fetch (default: 5)")
 	rootCmd.PersistentFlags().IntVarP(&commentlimit, "commentlimit", "c", 5, "Number of comments to fetch (default: 5)")
 	rootCmd.PersistentFlags().StringVarP(&repoState, "state", "s", "", "State of repository to fetch (default: open)")
+	rootCmd.PersistentFlags().StringVarP(&reviewer, "reviewer", "v", "", "Filter PRs by reviewer")
+	rootCmd.PersistentFlags().StringVarP(&author, "author", "a", "", "Filter PRs by author")
 }
 
 func Execute() error {
