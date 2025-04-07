@@ -141,7 +141,7 @@ func init() {
 	rootCmd.PersistentFlags().IntVarP(&repolimit, "repolimit", "r", 5, "Number of PRs to fetch (default: 5)")
 	rootCmd.PersistentFlags().IntVarP(&commentlimit, "commentlimit", "c", 5, "Number of comments to fetch (default: 5)")
 	rootCmd.PersistentFlags().StringVarP(&repoState, "state", "s", "", "State of repository to fetch (default: open)")
-	rootCmd.PersistentFlags().StringVarP(&reviewer, "reviewer", "v", "", "Filter PRs by reviewer")
+	rootCmd.PersistentFlags().StringVarP(&reviewer, "reviewer", "v", "", "Filter PRs by review-requested")
 	rootCmd.PersistentFlags().StringVarP(&author, "author", "a", "", "Filter PRs by author")
 }
 
