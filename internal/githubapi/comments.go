@@ -19,7 +19,7 @@ func SplitOwnerRepo(nameWithOwner string) (owner, repo string, err error) {
 }
 
 func (c *RealGitHubClient) FetchIssueComments(owner, repo string, number int) ([]internal.IssueComment, error) {
-	cmd := exec.Command("gh", "api",
+	cmd := exec.Command("gh", "api", "--paginate",
 		fmt.Sprintf("repos/%s/%s/issues/%d/comments", owner, repo, number))
 	out, err := cmd.Output()
 	if err != nil {
@@ -34,7 +34,7 @@ func (c *RealGitHubClient) FetchIssueComments(owner, repo string, number int) ([
 }
 
 func (c *RealGitHubClient) FetchPullRequestReviews(owner, repo string, number int) ([]internal.Review, error) {
-	cmd := exec.Command("gh", "api",
+	cmd := exec.Command("gh", "api", "--paginate",
 		fmt.Sprintf("repos/%s/%s/pulls/%d/reviews", owner, repo, number))
 	out, err := cmd.Output()
 	if err != nil {
@@ -49,7 +49,7 @@ func (c *RealGitHubClient) FetchPullRequestReviews(owner, repo string, number in
 }
 
 func (c *RealGitHubClient) FetchPullRequestReviewComments(owner, repo string, number int) ([]internal.ReviewComment, error) {
-	cmd := exec.Command("gh", "api",
+	cmd := exec.Command("gh", "api", "--paginate",
 		fmt.Sprintf("repos/%s/%s/pulls/%d/comments", owner, repo, number))
 	out, err := cmd.Output()
 	if err != nil {
