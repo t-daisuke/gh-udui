@@ -9,6 +9,15 @@ import (
 	"github.com/t-daisuke/gh-udui/internal"
 )
 
+type PullRequestReviewState string
+
+const (
+	PullRequestReviewStatePending          PullRequestReviewState = "COMMENTED"
+	PullRequestReviewStateApproved         PullRequestReviewState = "APPROVED"
+	PullRequestReviewStateChangesRequested PullRequestReviewState = "CHANGES_REQUESTED"
+	PullRequestReviewStateDismissed        PullRequestReviewState = "DISMISSED"
+)
+
 // ConvertIssueComments : IssueComments → []UnifiedComment
 func ConvertIssueComments(issueComments []internal.IssueComment) []internal.UnifiedComment {
 	var result []internal.UnifiedComment
@@ -30,7 +39,23 @@ func ConvertPullRequestReviews(reviews []internal.Review) []internal.UnifiedComm
 		t, _ := time.Parse(time.RFC3339, r.SubmittedAt)
 		body := r.Body
 		if r.State != "" {
-			body = fmt.Sprintf("[State: %s]\n%s", r.State, r.Body)
+			stateEmoji := ""
+			switch PullRequestReviewState(r.State) {
+			case PullRequestReviewStatePending:
+				stateEmoji = "💬"
+			case PullRequestReviewStateApproved:
+				stateEmoji = "✅"
+			case PullRequestReviewStateChangesRequested:
+				stateEmoji = "❌"
+			case PullRequestReviewStateDismissed:
+				stateEmoji = "🚫"
+			}
+
+			if stateEmoji != "" {
+				body = fmt.Sprintf("%s [State: %s]\n%s", stateEmoji, r.State, r.Body)
+			} else {
+				body = fmt.Sprintf("[State: %s]\n%s", r.State, r.Body)
+			}
 		}
 
 		result = append(result, internal.UnifiedComment{
