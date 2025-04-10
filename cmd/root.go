@@ -84,22 +84,10 @@ from non-bot users.`,
 				continue
 			}
 
-			// 3.3 IssueComments・Reviews・ReviewComments を取得
-			issueCs, err := gitHubClient.FetchIssueComments(owner, repo, pr.Number)
+			// 3.3 IssueComments・Reviews・ReviewComments を並列に取得
+			issueCs, reviews, reviewCs, err := gitHubClient.FetchAllCommentsParallel(owner, repo, pr.Number)
 			if err != nil {
-				log.Printf("Error fetching IssueComments: %v\n", err)
-				fmt.Println("---")
-				continue
-			}
-			reviews, err := gitHubClient.FetchPullRequestReviews(owner, repo, pr.Number)
-			if err != nil {
-				log.Printf("Error fetching Reviews: %v\n", err)
-				fmt.Println("---")
-				continue
-			}
-			reviewCs, err := gitHubClient.FetchPullRequestReviewComments(owner, repo, pr.Number)
-			if err != nil {
-				log.Printf("Error fetching ReviewComments: %v\n", err)
+				log.Printf("Error fetching comments: %v\n", err)
 				fmt.Println("---")
 				continue
 			}
