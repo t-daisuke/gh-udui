@@ -1,4 +1,4 @@
-module github.com/t-daisuke/gh-udui
+module github.com/t-daisuke/gh-utui
 
 go 1.23.2
 

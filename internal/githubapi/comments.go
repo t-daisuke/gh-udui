@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/google/go-github/v57/github"
-	"github.com/t-daisuke/gh-udui/internal"
+	"github.com/t-daisuke/gh-utui/internal"
 )
 
 // "owner/repo"形式の文字列からownerとrepoを分割する

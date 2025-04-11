@@ -4,7 +4,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/t-daisuke/gh-udui/internal"
+	"github.com/t-daisuke/gh-utui/internal"
 )
 
 // GitHubAPI インターフェース: PR検索やコメント取得などをまとめる

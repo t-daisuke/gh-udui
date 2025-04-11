@@ -6,7 +6,7 @@ import (
 	"os/exec"
 
 	"github.com/google/go-github/v57/github"
-	"github.com/t-daisuke/gh-udui/internal"
+	"github.com/t-daisuke/gh-utui/internal"
 	"golang.org/x/oauth2"
 )
 

@@ -7,8 +7,8 @@ import (
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 
-	"github.com/t-daisuke/gh-udui/internal/aggregator"
-	"github.com/t-daisuke/gh-udui/internal/githubapi"
+	"github.com/t-daisuke/gh-utui/internal/aggregator"
+	"github.com/t-daisuke/gh-utui/internal/githubapi"
 )
 
 var (
@@ -22,9 +22,9 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "gh-udui",
+	Use:   "utui",
 	Short: "A GitHub CLI extension for viewing PR comments",
-	Long: `gh-udui is a GitHub CLI extension that helps you view PR comments, reviews, and discussions
+	Long: `gh utui is a GitHub CLI extension that helps you view PR comments, reviews, and discussions
 in a user-friendly format. It fetches PR information and displays the latest comments
 from non-bot users.`,
 	Run: func(cmd *cobra.Command, args []string) {

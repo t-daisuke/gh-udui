@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/t-daisuke/gh-udui/internal"
+	"github.com/t-daisuke/gh-utui/internal"
 )
 
 type PullRequestReviewState string
