@@ -8,6 +8,17 @@ this is git hub extensiton for comments, issues, and reviews Update detection on
 gh extension install t-daisuke/gh-utui
 ```
 
+## Pronunciation
+
+The name gh-utui is pronounced like the Japanese word “あつい”
+
+/atsɯi/
+
+(IPA – similar to “ah-tsu-ee”)
+
+This pronunciation reflects its origin:
+Update detection on Text User Interface → u[A]-t-u-i → “atsui”
+
 ## Usage
 
 ```bash
